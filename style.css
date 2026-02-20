@@ -23,6 +23,7 @@ body {
   align-items: center;
   gap: 16px;
   max-width: 100%;
+  flex-shrink: 0;
 }
 
 /* Wrapper sized by JS (scaled); canvas scaled via transform in JS */
@@ -44,7 +45,7 @@ body {
   touch-action: none;
 }
 
-/* HUD — responsive, always visible and readable */
+/* HUD — responsive, center and middle aligned on desktop and mobile */
 #hud {
   display: flex;
   gap: clamp(24px, 6vmin, 48px);
@@ -54,6 +55,13 @@ body {
   min-width: 0;
   max-width: 100%;
   justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+#score-display,
+#lives-display {
+  text-align: center;
 }
 
 #hud .label {
@@ -71,60 +79,7 @@ body {
   color: #ffffff;
 }
 
-/* D-pad: show only on coarse pointer (touch), 60px+ tap targets */
+/* D-pad removed: mobile uses swipe/touch-drag on canvas only */
 #controls {
-  display: none;
-}
-
-@media (pointer: coarse) {
-  #controls {
-    display: grid;
-    grid-template-columns: 60px 60px 60px;
-    grid-template-rows: 60px 60px 60px;
-    gap: 4px;
-    align-items: center;
-    justify-items: center;
-  }
-
-  .control-btn {
-    min-width: 60px;
-    min-height: 60px;
-    width: 60px;
-    height: 60px;
-    padding: 0;
-    border: 2px solid #1a1a2e;
-    border-radius: 8px;
-    background-color: #0d0d1a;
-    color: #ffd700;
-    font-size: 24px;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-  }
-
-  .control-btn:hover,
-  .control-btn:active {
-    background-color: #1a1a2e;
-  }
-
-  /* Place Up at top center */
-  .control-btn[data-direction="3"] {
-    grid-column: 2;
-    grid-row: 1;
-  }
-  /* Place Left at middle left */
-  .control-btn[data-direction="2"] {
-    grid-column: 1;
-    grid-row: 2;
-  }
-  /* Place Right at middle right */
-  .control-btn[data-direction="0"] {
-    grid-column: 3;
-    grid-row: 2;
-  }
-  /* Place Down at bottom center */
-  .control-btn[data-direction="1"] {
-    grid-column: 2;
-    grid-row: 3;
-  }
+  display: none !important;
 }
