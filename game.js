@@ -48,9 +48,25 @@ const STATE_GAME_OVER = 'game_over';
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
 
-// Ensure canvas matches our grid dimensions
+// Ensure canvas matches our grid dimensions (never change — game logic depends on this)
 canvas.width = CANVAS_WIDTH;
 canvas.height = CANVAS_HEIGHT;
+
+/**
+ * Applies responsive scale so the game fits on screen with ~5% margin.
+ * Uses CSS transform on the canvas only; canvas internal resolution is unchanged.
+ */
+function applyScale() {
+  const scale = Math.min(window.innerWidth / CANVAS_WIDTH, window.innerHeight / CANVAS_HEIGHT) * 0.95;
+  const wrapper = document.getElementById('canvas-wrapper');
+  if (!wrapper) return;
+  wrapper.style.width = (CANVAS_WIDTH * scale) + 'px';
+  wrapper.style.height = (CANVAS_HEIGHT * scale) + 'px';
+  canvas.style.transform = 'scale(' + scale + ')';
+  canvas.style.transformOrigin = '0 0';
+}
+applyScale();
+window.addEventListener('resize', applyScale);
 
 // --- Maze Class ---
 /**
@@ -870,6 +886,18 @@ canvas.addEventListener('touchend', (e) => {
 canvas.addEventListener('touchcancel', () => {
   touchStartX = null;
   touchStartY = null;
+});
+
+// --- D-pad controls (mobile): 60px+ tap targets, only when playing ---
+document.querySelectorAll('.control-btn').forEach((btn) => {
+  const dir = Number(btn.getAttribute('data-direction'));
+  const setDir = (e) => {
+    e.preventDefault();
+    if (gameState !== STATE_PLAYING) return;
+    pacman.setNextDirection(dir);
+  };
+  btn.addEventListener('touchstart', setDir, { passive: false });
+  btn.addEventListener('mousedown', setDir);
 });
 
 // --- Start the game loop ---
