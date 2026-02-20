@@ -14,6 +14,7 @@ body {
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  padding: 2vmin;
 }
 
 #game-container {
@@ -21,9 +22,16 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 16px;
+  max-width: 100%;
 }
 
-/* Canvas: 28 cols × 24px = 672px, 31 rows × 24px = 744px — fixed size, no stretch */
+/* Wrapper sized by JS (scaled); canvas scaled via transform in JS */
+#canvas-wrapper {
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* Canvas: intrinsic 672×744; transform applied in JS, never change width/height for game logic */
 #game-canvas {
   display: block;
   width: 672px;
@@ -32,22 +40,24 @@ body {
   border: 2px solid #1a1a2e;
   border-radius: 4px;
   box-shadow: 0 0 30px rgba(74, 74, 255, 0.15);
-  touch-action: none; /* prevent page scroll during play on mobile */
+  transform-origin: 0 0;
+  touch-action: none;
 }
 
-/* HUD shell — layout and labels */
+/* HUD — responsive, always visible and readable */
 #hud {
   display: flex;
-  gap: 48px;
-  padding: 12px 24px;
+  gap: clamp(24px, 6vmin, 48px);
+  padding: clamp(8px, 2vmin, 12px) clamp(16px, 4vmin, 24px);
   background-color: #0d0d1a;
   border-radius: 4px;
-  min-width: 400px;
+  min-width: 0;
+  max-width: 100%;
   justify-content: center;
 }
 
 #hud .label {
-  font-size: 10px;
+  font-size: clamp(10px, 2.5vmin, 14px);
   letter-spacing: 2px;
   opacity: 0.6;
   display: block;
@@ -56,7 +66,65 @@ body {
 
 #score-value,
 #lives-value {
-  font-size: 24px;
+  font-size: clamp(18px, 4vmin, 24px);
   font-weight: 700;
   color: #ffffff;
+}
+
+/* D-pad: show only on coarse pointer (touch), 60px+ tap targets */
+#controls {
+  display: none;
+}
+
+@media (pointer: coarse) {
+  #controls {
+    display: grid;
+    grid-template-columns: 60px 60px 60px;
+    grid-template-rows: 60px 60px 60px;
+    gap: 4px;
+    align-items: center;
+    justify-items: center;
+  }
+
+  .control-btn {
+    min-width: 60px;
+    min-height: 60px;
+    width: 60px;
+    height: 60px;
+    padding: 0;
+    border: 2px solid #1a1a2e;
+    border-radius: 8px;
+    background-color: #0d0d1a;
+    color: #ffd700;
+    font-size: 24px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .control-btn:hover,
+  .control-btn:active {
+    background-color: #1a1a2e;
+  }
+
+  /* Place Up at top center */
+  .control-btn[data-direction="3"] {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  /* Place Left at middle left */
+  .control-btn[data-direction="2"] {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  /* Place Right at middle right */
+  .control-btn[data-direction="0"] {
+    grid-column: 3;
+    grid-row: 2;
+  }
+  /* Place Down at bottom center */
+  .control-btn[data-direction="1"] {
+    grid-column: 2;
+    grid-row: 3;
+  }
 }
