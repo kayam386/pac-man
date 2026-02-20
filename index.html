@@ -12,7 +12,9 @@
 </head>
 <body>
   <div id="game-container">
-    <canvas id="game-canvas"></canvas>
+    <div id="canvas-wrapper">
+      <canvas id="game-canvas"></canvas>
+    </div>
     <div id="hud">
       <div id="score-display">
         <span class="label">SCORE</span>
@@ -22,6 +24,12 @@
         <span class="label">LIVES</span>
         <span id="lives-value">3</span>
       </div>
+    </div>
+    <div id="controls" aria-label="Direction controls">
+      <button type="button" class="control-btn" data-direction="3" aria-label="Up">↑</button>
+      <button type="button" class="control-btn" data-direction="0" aria-label="Right">→</button>
+      <button type="button" class="control-btn" data-direction="2" aria-label="Left">←</button>
+      <button type="button" class="control-btn" data-direction="1" aria-label="Down">↓</button>
     </div>
   </div>
   <script src="game.js"></script>
