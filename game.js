@@ -52,12 +52,20 @@ const ctx = canvas.getContext('2d');
 canvas.width = CANVAS_WIDTH;
 canvas.height = CANVAS_HEIGHT;
 
+/** Reserve space below canvas for HUD (score/lives) and gap so scoreboard stays visible */
+const HUD_RESERVE_PX = 88;
+
 /**
  * Applies responsive scale so the game fits on screen with ~5% margin.
  * Uses CSS transform on the canvas only; canvas internal resolution is unchanged.
+ * Height accounts for HUD so the scoreboard is never pushed off-screen.
  */
 function applyScale() {
-  const scale = Math.min(window.innerWidth / CANVAS_WIDTH, window.innerHeight / CANVAS_HEIGHT) * 0.95;
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  const scaleW = w / CANVAS_WIDTH;
+  const scaleH = (h - HUD_RESERVE_PX) / CANVAS_HEIGHT;
+  const scale = Math.min(scaleW, scaleH, 1) * 0.95;
   const wrapper = document.getElementById('canvas-wrapper');
   if (!wrapper) return;
   wrapper.style.width = (CANVAS_WIDTH * scale) + 'px';
@@ -886,18 +894,6 @@ canvas.addEventListener('touchend', (e) => {
 canvas.addEventListener('touchcancel', () => {
   touchStartX = null;
   touchStartY = null;
-});
-
-// --- D-pad controls (mobile): 60px+ tap targets, only when playing ---
-document.querySelectorAll('.control-btn').forEach((btn) => {
-  const dir = Number(btn.getAttribute('data-direction'));
-  const setDir = (e) => {
-    e.preventDefault();
-    if (gameState !== STATE_PLAYING) return;
-    pacman.setNextDirection(dir);
-  };
-  btn.addEventListener('touchstart', setDir, { passive: false });
-  btn.addEventListener('mousedown', setDir);
 });
 
 // --- Start the game loop ---
