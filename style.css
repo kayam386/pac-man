@@ -1,0 +1,62 @@
+/* Pac-Man — Modern dark theme styling */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  background-color: #0a0a0f;
+  font-family: 'Orbitron', monospace;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+#game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Canvas: 28 cols × 24px = 672px, 31 rows × 24px = 744px — fixed size, no stretch */
+#game-canvas {
+  display: block;
+  width: 672px;
+  height: 744px;
+  background-color: #0a0a0f;
+  border: 2px solid #1a1a2e;
+  border-radius: 4px;
+  box-shadow: 0 0 30px rgba(74, 74, 255, 0.15);
+  touch-action: none; /* prevent page scroll during play on mobile */
+}
+
+/* HUD shell — layout and labels */
+#hud {
+  display: flex;
+  gap: 48px;
+  padding: 12px 24px;
+  background-color: #0d0d1a;
+  border-radius: 4px;
+  min-width: 400px;
+  justify-content: center;
+}
+
+#hud .label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  opacity: 0.6;
+  display: block;
+  margin-bottom: 4px;
+}
+
+#score-value,
+#lives-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+}
